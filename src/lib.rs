@@ -12,12 +12,11 @@ pub fn gdb_probe(){
            println!("GDB ATTACHED, CONTINUE");
        }
        Ok(ForkResult::Child) => {
-           let gdb =  format!("sudo gdb --pid {}", getppid());
-           let argv = vec!["urxvt", "-e", "sh", "-c", &gdb];
+           let gdb =  format!("ugdb --gdb=rust-gdb --pid {}", getppid());
+           let argv = vec!["tmux", "neww", &gdb];
            let argv_c = argv.iter().map(|s| CString::new(*s).unwrap()).collect::<Vec<_>>();
-           println!("execv: {:?}", argv);
            setsid().expect("could not setsid()");
-           execvp(&CString::new("urxvt").unwrap(), &argv_c[..]).expect("could not execv terminal, maybe urxvt is missing?");
+           execvp(&CString::new("tmux").unwrap(), &argv_c[..]).expect("could not execv terminal, maybe urxvt is missing?");
        }
 
        Err(_) => println!("Fork failed"),
