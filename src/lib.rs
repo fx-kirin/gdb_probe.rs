@@ -12,7 +12,8 @@ pub fn gdb_probe(){
            println!("GDB ATTACHED, CONTINUE");
        }
        Ok(ForkResult::Child) => {
-           let gdb =  format!("ugdb --gdb=rust-gdb --pid {}", getppid());
+           let gdb =  format!("sudo ugdb --gdb=rust-gdb --pid {}", getppid());
+           println!("gdb: {}", gdb);
            let argv = vec!["tmux", "neww", &gdb];
            let argv_c = argv.iter().map(|s| CString::new(*s).unwrap()).collect::<Vec<_>>();
            setsid().expect("could not setsid()");
